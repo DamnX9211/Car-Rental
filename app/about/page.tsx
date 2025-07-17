@@ -56,7 +56,7 @@ export default function AboutPage() {
           >
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Our Story</h2>
             <p className="text-lg text-muted-foreground">
-              Founded in 2010, CarRental began with a simple mission: to provide exceptional car rental experiences at
+              Founded in 2025, CarRental began with a simple mission: to provide exceptional car rental experiences at
               affordable prices.
             </p>
             <p className="text-lg text-muted-foreground">
@@ -153,7 +153,7 @@ export default function AboutPage() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {
-              name: "Sarah Johnson",
+              name: "Rohit Kumar",
               role: "Chief Executive Officer",
               image: "/placeholder.svg?height=300&width=300",
               bio: "With over 15 years of experience in the automotive and rental industry, Sarah leads our company with vision and passion.",

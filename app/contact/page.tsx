@@ -32,21 +32,21 @@ export default function ContactPage() {
                   <MapPin className="mr-3 h-5 w-5 text-primary" />
                   <div>
                     <p className="font-medium">Main Office</p>
-                    <p className="text-sm text-muted-foreground">123 Drive Avenue, New York, NY 10001</p>
+                    <p className="text-sm text-muted-foreground">Bandra, Mumbai, Maharashtra, India, Pin Code: 400051</p>
                   </div>
                 </div>
                 <div className="flex">
                   <Phone className="mr-3 h-5 w-5 text-primary" />
                   <div>
                     <p className="font-medium">Phone</p>
-                    <p className="text-sm text-muted-foreground">+1 (555) 123-4567</p>
+                    <p className="text-sm text-muted-foreground">+91 8077783582</p>
                   </div>
                 </div>
                 <div className="flex">
                   <Mail className="mr-3 h-5 w-5 text-primary" />
                   <div>
                     <p className="font-medium">Email</p>
-                    <p className="text-sm text-muted-foreground">info@carrentalservice.com</p>
+                    <p className="text-sm text-muted-foreground">rohitkuumar1995@gmail.com</p>
                   </div>
                 </div>
                 <div className="flex">
