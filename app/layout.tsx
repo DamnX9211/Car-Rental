@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   ],
   authors: [
     {
-      name: "CarRental",
+      name: "Rohit Kumar",
       url: siteConfig.url,
     },
   ],
@@ -74,7 +74,6 @@ export const metadata: Metadata = {
   },
   manifest: `${siteConfig.url}/site.webmanifest`,
   metadataBase: new URL(siteConfig.url),
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -92,6 +91,3 @@ export default function RootLayout({
   )
 }
 
-
-
-import './globals.css'

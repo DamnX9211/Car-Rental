@@ -31,7 +31,7 @@ app.use(limiter)
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   }),
 )
@@ -41,21 +41,22 @@ app.use(express.json({ limit: "10mb" }))
 app.use(express.urlencoded({ extended: true, limit: "10mb" }))
 
 // MongoDB connection
+const uri = process.env.MONGODB_URI
+if(!uri) {
+  throw new Error("MONGODB_URI is not defined in the environment variables")
+}
 mongoose
-  .connect(process.env.MONGODB_URI || "mongodb+srv://workrohit282:S9ng1daIQmnL3C6C@cluster0.r3nfatc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(uri)
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch((err) => console.error("❌ MongoDB connection error:", err))
 
 // Routes
 app.use("/api/auth", authRoutes)
 app.use("/api/cars", carRoutes)
-app.use("/api/bookings", bookingRoutes)
+//app.use("/api/bookings", bookingRoutes)
 app.use("/api/users", userRoutes)
 app.use("/api/business", businessRoutes)
-app.use("/api/reviews", reviewRoutes)
+//app.use("/api/reviews", reviewRoutes)
 app.use("/api/payments", paymentRoutes)
 
 // Health check endpoint

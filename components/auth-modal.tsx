@@ -46,7 +46,7 @@ export function AuthModal({ show, onClose }: AuthModalProps) {
     setIsLoading(true)
 
     try {
-      await auth.login(loginEmail, loginPassword)
+      await auth?.login(loginEmail, loginPassword)
       toast({
         title: "Welcome back!",
         description: "You've successfully logged in.",
@@ -86,15 +86,22 @@ export function AuthModal({ show, onClose }: AuthModalProps) {
     setIsLoading(true)
 
     try {
-      await auth.register(registerName, registerEmail, registerPassword)
+      const [firstName, ...rest] = registerName.trim().split(" ")
+      const lastName = rest.join(" ") || firstName
+
+      await auth?.register(firstName, lastName, registerEmail, registerPassword)
       toast({
         title: "Account created!",
         description: "You've successfully registered and logged in.",
       })
     } catch (error) {
+      let errorMessage = "There was an error creating your account";
+      if (error && typeof error === "object" && "message" in error && typeof (error as any).message === "string") {
+        errorMessage = (error as any).message;
+      }
       toast({
         title: "Registration failed",
-        description: "There was an error creating your account",
+        description: errorMessage,
         variant: "destructive",
       })
     } finally {

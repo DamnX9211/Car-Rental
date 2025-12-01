@@ -28,58 +28,58 @@ const userSchema = new mongoose.Schema(
       minlength: [6, "Password must be at least 6 characters"],
       select: false, // Don't include password in queries by default
     },
-    phone: {
-      type: String,
-      required: [true, "Phone number is required"],
-      match: [/^[+]?[1-9][\d]{0,15}$/, "Please enter a valid phone number"],
-    },
-    dateOfBirth: {
-      type: Date,
-      required: [true, "Date of birth is required"],
-    },
-    licenseNumber: {
-      type: String,
-      required: [true, "License number is required"],
-      unique: true,
-    },
-    address: {
-      street: { type: String, required: true },
-      city: { type: String, required: true },
-      state: { type: String, required: true },
-      zipCode: { type: String, required: true },
-      country: { type: String, default: "USA" },
-    },
-    role: {
-      type: String,
-      enum: ["customer", "business", "admin"],
-      default: "customer",
-    },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
-    loyaltyPoints: {
-      type: Number,
-      default: 0,
-    },
-    avatar: {
-      type: String,
-      default: null,
-    },
-    preferences: {
-      newsletter: { type: Boolean, default: true },
-      notifications: { type: Boolean, default: true },
-      darkMode: { type: Boolean, default: false },
-    },
+    // phone: {
+    //   type: String,
+    //   required: [true, "Phone number is required"],
+    //   match: [/^[+]?[1-9][\d]{0,15}$/, "Please enter a valid phone number"],
+    // },
+    // dateOfBirth: {
+    //   type: Date,
+    //   required: [true, "Date of birth is required"],
+    // },
+    // licenseNumber: {
+    //   type: String,
+    //   required: [true, "License number is required"],
+    //   unique: true,
+    // },
+    // address: {
+    //   street: { type: String, required: true },
+    //   city: { type: String, required: true },
+    //   state: { type: String, required: true },
+    //   zipCode: { type: String, required: true },
+    //   country: { type: String, default: "USA" },
+    // },
+    // role: {
+    //   type: String,
+    //   enum: ["customer", "business", "admin"],
+    //   default: "customer",
+    // },
+    // isVerified: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // loyaltyPoints: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // avatar: {
+    //   type: String,
+    //   default: null,
+    // },
+    // preferences: {
+    //   newsletter: { type: Boolean, default: true },
+    //   notifications: { type: Boolean, default: true },
+    //   darkMode: { type: Boolean, default: false },
+    // },
   },
-  {
-    timestamps: true,
-  },
+  // {
+  //   timestamps: true,
+  // },
 )
 
 // Index for better query performance
 userSchema.index({ email: 1 })
-userSchema.index({ role: 1 })
+//userSchema.index({ role: 1 })
 
 // Hash password before saving
 userSchema.pre("save", async function (next) {

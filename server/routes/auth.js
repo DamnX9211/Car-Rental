@@ -6,6 +6,8 @@ const { authenticate } = require("../middleware/auth")
 
 const router = express.Router()
 
+
+
 // Generate JWT token
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, {
@@ -23,8 +25,8 @@ router.post(
     body("lastName").trim().isLength({ min: 2 }).withMessage("Last name must be at least 2 characters"),
     body("email").isEmail().normalizeEmail().withMessage("Please provide a valid email"),
     body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
-    body("phone").isMobilePhone().withMessage("Please provide a valid phone number"),
-    body("licenseNumber").trim().isLength({ min: 5 }).withMessage("License number must be at least 5 characters"),
+    //body("phone").isMobilePhone().withMessage("Please provide a valid phone number"),
+    //body("licenseNumber").trim().isLength({ min: 5 }).withMessage("License number must be at least 5 characters"),
   ],
   async (req, res) => {
     try {
@@ -37,7 +39,7 @@ router.post(
         })
       }
 
-      const { firstName, lastName, email, password, phone, dateOfBirth, licenseNumber, address } = req.body
+      const { firstName, lastName, email, password } = req.body
 
       // Check if user already exists
       const existingUser = await User.findOne({ email })
@@ -49,13 +51,13 @@ router.post(
       }
 
       // Check if license number already exists
-      const existingLicense = await User.findOne({ licenseNumber })
-      if (existingLicense) {
-        return res.status(400).json({
-          success: false,
-          message: "User already exists with this license number",
-        })
-      }
+      // const existingLicense = await User.findOne({ licenseNumber })
+      // if (existingLicense) {
+      //   return res.status(400).json({
+      //     success: false,
+      //     message: "User already exists with this license number",
+      //   })
+      // }
 
       // Create new user
       const user = new User({
@@ -63,10 +65,10 @@ router.post(
         lastName,
         email,
         password,
-        phone,
-        dateOfBirth,
-        licenseNumber,
-        address,
+        // phone,
+        // dateOfBirth,
+        // licenseNumber,
+        // address,
       })
 
       await user.save()
@@ -83,7 +85,7 @@ router.post(
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            role: user.role,
+            //role: user.role,
           },
           token,
         },

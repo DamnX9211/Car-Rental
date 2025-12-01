@@ -1,18 +1,22 @@
 "use client"
 
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import { AuthModal } from "@/components/auth-modal"
+import { apiFetch } from "@/lib/api"
 
-interface User {
+type AuthUser = {
   id: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
+  //role: string
 }
 
 interface AuthContextType {
-  user: User | null
+  user: AuthUser | null
+  token: string | null
   login: (email: string, password: string) => Promise<void>
-  register: (name: string, email: string, password: string) => Promise<void>
+  register: (firstName: string, lastName: string, email: string, password: string) => Promise<void>
   logout: () => void
   showAuthModal: () => void
 }
@@ -20,39 +24,83 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<AuthUser | null>(null)
+  const [token, setToken] = useState<string | null>(
+    typeof window !== "undefined" ? localStorage.getItem("token") : null
+  )
   const [showModal, setShowModal] = useState(false)
+
+  useEffect(() => {
+        const storedToekn = typeof window !== "undefined" ? localStorage.getItem("token") : null
+        if ( !storedToekn || user) return;
+
+        apiFetch<{ succes: boolean;  data: {user: any }}>("/api/auth/me")
+        .then((res) => {
+          const backendUser = res.data.user;
+          setUser({
+            id: backendUser._id ?? backendUser.id,
+            firstName: backendUser.firstName,
+            lastName: backendUser.lastName,
+            email: backendUser.email,
+          })
+          setToken(storedToekn)
+        })
+        .catch(() => {
+          localStorage.removeItem("token")
+          setToken(null)
+          setUser(null)
+        })
+  }, [])
   
   const login = async (email: string, password: string) => {
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // In a real app, this would validate credentials with the backend
-    setUser({
-      id: "user-1",
-      name: "John Doe",
-      email: email
+    const res = await apiFetch<{ 
+      success: boolean;
+      message: string; 
+      data: { user: any; token: string }}
+      >("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password}),
     })
-    
+    const { user: backendUser, token } = res.data;
+    localStorage.setItem("token", token)
+    setToken(token)
+    setUser({
+      id: backendUser._id ?? backendUser.id,
+      firstName: backendUser.firstName,
+      lastName: backendUser.lastName,
+      email: backendUser.email,
+    })
     setShowModal(false)
   }
-  
-  const register = async (name: string, email: string, password: string) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
     
-    // In a real app, this would register the user in the backend
-    setUser({
-      id: "user-1",
-      name: name,
-      email: email
+  const register = async (firstName: string, lastName: string, email: string, password: string) => {
+    const res = await apiFetch<{ 
+      success: boolean
+      message: string
+      data: { user: any; token: string } }
+      >("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify({ firstName, lastName, email, password}),
     })
-    
+    const { user: backendUser, token } = res.data;
+    localStorage.setItem("token", token)
+    setToken(token)
+    setUser({
+      id: backendUser._id ?? backendUser.id,
+      firstName: backendUser.firstName,
+      lastName: backendUser.lastName,
+      email: backendUser.email,
+    })
     setShowModal(false)
   }
-  
+    
   const logout = () => {
     setUser(null)
+    setToken(null)
+    if(typeof window !== "undefined") {
+      localStorage.removeItem("token")
+    }
   }
   
   const showAuthModal = () => {
@@ -60,7 +108,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
   
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, showAuthModal }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, showAuthModal }}>
       {children}
       <AuthModal show={showModal} onClose={() => setShowModal(false)} />
     </AuthContext.Provider>
